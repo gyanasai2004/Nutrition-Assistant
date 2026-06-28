@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 
@@ -15,25 +15,28 @@ function ProfileEdit() {
 
   const token = localStorage.getItem("token");
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  const headers = useMemo(
+    () => ({
+      Authorization: `Bearer ${token}`,
+    }),
+    [token]
+  );
 
   const loadProfile = useCallback(async () => {
     try {
       const res = await API.get("/profile", { headers });
 
       setForm({
-        name: res.data.name,
-        age: res.data.age,
-        height: res.data.height,
-        weight: res.data.weight,
-        activityLevel: res.data.activityLevel,
+        name: res.data.name || "",
+        age: res.data.age || "",
+        height: res.data.height || "",
+        weight: res.data.weight || "",
+        activityLevel: res.data.activityLevel || "",
       });
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [headers]);
 
   useEffect(() => {
     loadProfile();
