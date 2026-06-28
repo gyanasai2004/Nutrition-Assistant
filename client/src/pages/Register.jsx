@@ -173,11 +173,24 @@ function Register() {
             </div>
 
             <button
-              className="btn btn-success w-100 mt-3"
-              onClick={handleSubmit}
-            >
-              Register
-            </button>
+  className="btn btn-success w-100 mt-3"
+  onClick={handleSubmit}
+  style={{
+    transition: "0.3s",
+    fontWeight: "600",
+    borderRadius: "10px",
+  }}
+  onMouseEnter={(e) => {
+    e.target.style.backgroundColor = "#198754";
+    e.target.style.transform = "scale(1.03)";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.backgroundColor = "";
+    e.target.style.transform = "scale(1)";
+  }}
+>
+  Register
+</button>
 
             <p className="text-center mt-4">
               Already have an account?{" "}
