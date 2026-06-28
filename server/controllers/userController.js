@@ -16,6 +16,7 @@ const registerUser = async (req, res) => {
       height,
       weight,
       activityLevel,
+      goal,
     } = req.body;
 
     const userExists = await User.findOne({ email });
@@ -37,6 +38,7 @@ const registerUser = async (req, res) => {
       height,
       weight,
       activityLevel,
+      goal,
     });
 
     const userData = user.toObject();
