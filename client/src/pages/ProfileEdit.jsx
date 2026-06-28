@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 
@@ -19,11 +19,7 @@ function ProfileEdit() {
     Authorization: `Bearer ${token}`,
   };
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       const res = await API.get("/profile", { headers });
 
@@ -37,7 +33,11 @@ function ProfileEdit() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   const handleChange = (e) => {
     setForm({
@@ -49,7 +49,6 @@ function ProfileEdit() {
   const updateProfile = async () => {
     try {
       await API.put("/profile", form, { headers });
-
       navigate("/dashboard");
     } catch (err) {
       console.error(err);

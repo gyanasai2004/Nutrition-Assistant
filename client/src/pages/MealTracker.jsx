@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import API from "../services/api";
 import MainLayout from "../layouts/MainLayout";
 
@@ -19,7 +19,7 @@ function MealTracker() {
     Authorization: `Bearer ${token}`,
   };
 
-  const loadMeals = async () => {
+  const loadMeals = useCallback(async () => {
     try {
       const mealRes = await API.get("/meals", { headers });
       setMeals(mealRes.data);
@@ -29,11 +29,11 @@ function MealTracker() {
     } catch (err) {
       console.log(err);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadMeals();
-  }, []);
+  }, [loadMeals]);
 
   const addMeal = async () => {
     if (!food) {
@@ -70,22 +70,18 @@ function MealTracker() {
       await API.delete(`/meal/${id}`, { headers });
       alert("Meal Deleted");
       loadMeals();
-    } catch {
+    } catch (err) {
       alert("Failed to delete meal");
     }
   };
-
   return (
     <MainLayout>
-
       <h2 className="fw-bold mb-4">
         🍽 Meal Tracker
       </h2>
 
       <div className="card p-4 shadow-sm border-0">
-
         <div className="row g-3">
-
           <div className="col-md-4">
             <select
               className="form-select"
@@ -116,17 +112,12 @@ function MealTracker() {
               Add Meal
             </button>
           </div>
-
         </div>
-
       </div>
 
       <div className="row mt-4">
-
         <div className="col-lg-4">
-
           <div className="card p-4 shadow-sm">
-
             <h4>Today's Summary</h4>
 
             <hr />
@@ -135,15 +126,11 @@ function MealTracker() {
             <p>🥩 Protein : {summary.protein}</p>
             <p>🍚 Carbs : {summary.carbs}</p>
             <p>🧈 Fat : {summary.fat}</p>
-
           </div>
-
         </div>
 
         <div className="col-lg-8">
-
           <div className="card p-4 shadow-sm">
-
             <h4>Today's Meals</h4>
 
             <hr />
@@ -160,9 +147,7 @@ function MealTracker() {
 
                   <p>{meal.food}</p>
 
-                  <p>
-                    🔥 {meal.calories} kcal
-                  </p>
+                  <p>🔥 {meal.calories} kcal</p>
 
                   <button
                     className="btn btn-danger btn-sm"
@@ -170,17 +155,12 @@ function MealTracker() {
                   >
                     Delete
                   </button>
-
                 </div>
               ))
             )}
-
           </div>
-
         </div>
-
       </div>
-
     </MainLayout>
   );
 }
