@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8000/api/users",
+  baseURL: "https://nutrition-assistant-9jpo.onrender.com",
 });
 
 export default API;
