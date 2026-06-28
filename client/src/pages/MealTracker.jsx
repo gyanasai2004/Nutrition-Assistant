@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import API from "../services/api";
 import MainLayout from "../layouts/MainLayout";
 
@@ -15,9 +15,11 @@ function MealTracker() {
 
   const token = localStorage.getItem("token");
 
-  const headers = {
+  const headers = useMemo(()=>({
     Authorization: `Bearer ${token}`,
-  };
+  }),
+  [token]
+);
 
   const loadMeals = useCallback(async () => {
     try {
@@ -29,7 +31,7 @@ function MealTracker() {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [headers]);
 
   useEffect(() => {
     loadMeals();
