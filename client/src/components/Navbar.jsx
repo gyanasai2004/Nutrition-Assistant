@@ -4,7 +4,12 @@ import { auth } from "../firebase";
 import ThemeToggle from "./ThemeToggle";
 import "./Navbar.css";
 
-function Navbar({ showSidebar, setShowSidebar }) {
+function Navbar({
+  sidebarOpen,
+  setSidebarOpen,
+  collapsed,
+  setCollapsed,
+}) {
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -23,11 +28,17 @@ function Navbar({ showSidebar, setShowSidebar }) {
       <div className="navbar-left">
 
         <button
-          className="menu-btn"
-          onClick={() => setShowSidebar(!showSidebar)}
-        >
-          ☰
-        </button>
+  className="menu-btn"
+  onClick={() => {
+    if (window.innerWidth <= 991) {
+      setSidebarOpen(!sidebarOpen);
+    } else {
+      setCollapsed(!collapsed);
+    }
+  }}
+>
+  ☰
+</button>
 
         <h3 className="navbar-title">
           🥗 Nutrition Assistant

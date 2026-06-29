@@ -4,22 +4,30 @@ import Navbar from "../components/Navbar";
 import "./MainLayout.css";
 
 function MainLayout({ children }) {
-  const [showSidebar, setShowSidebar] = useState(true);
+  // Mobile sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Desktop collapse
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className="layout">
-      {showSidebar && <Sidebar />}
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        collapsed={collapsed}
+      />
 
       <div
-        className="layout-content"
-        style={{
-          marginLeft: showSidebar ? "260px" : "0px",
-          transition: "0.3s",
-        }}
+        className={`layout-content ${
+          collapsed ? "collapsed" : ""
+        }`}
       >
         <Navbar
-          showSidebar={showSidebar}
-          setShowSidebar={setShowSidebar}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
         />
 
         <main className="layout-main">
