@@ -4,36 +4,36 @@ import { auth } from "../firebase";
 import ThemeToggle from "./ThemeToggle";
 import "./Navbar.css";
 
-function Navbar({ sidebarOpen, setSidebarOpen }) {
+function Navbar({ showSidebar, setShowSidebar }) {
   const navigate = useNavigate();
 
   const logout = async () => {
     try {
       await signOut(auth);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
 
     localStorage.removeItem("token");
     localStorage.removeItem("googleUser");
-
     navigate("/login");
   };
 
   return (
     <header className="navbar">
 
-      {/* Hamburger Menu */}
-      <button
-        className="menu-btn"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        ☰
-      </button>
+      <div className="navbar-left">
 
-      <h3 className="navbar-title">
-        🥗 Nutrition Assistant
-      </h3>
+        <button
+          className="menu-btn"
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          ☰
+        </button>
+
+        <h3 className="navbar-title">
+          🥗 Nutrition Assistant
+        </h3>
+
+      </div>
 
       <div className="navbar-right">
         <ThemeToggle />

@@ -24,11 +24,14 @@
 /* Tablet */
 
 @media (max-width:991px){
+.layout-content{
+    margin-left:260px;
+    transition:.35s;
+}
 
-  .layout-content{
-      margin-left:0;
-      width:100%;
-  }
+.layout-content.collapsed{
+    margin-left:80px;
+}
 
   .layout-main{
       padding:15px;
@@ -44,4 +47,18 @@
       padding:12px;
   }
 
+}
+.layout{
+    display:flex;
+    min-height:100vh;
+    background:#f4f7fc;
+}
+
+.layout-content{
+    flex:1;
+    transition:.3s;
+}
+
+.layout-main{
+    padding:25px;
 }

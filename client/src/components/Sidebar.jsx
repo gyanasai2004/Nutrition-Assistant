@@ -1,7 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
-function Sidebar({ sidebarOpen, setSidebarOpen }) {
+function Sidebar({
+  sidebarOpen,
+  setSidebarOpen,
+  collapsed,
+}) {
   const location = useLocation();
 
   const menuItems = [
@@ -14,7 +18,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <>
-      {/* Overlay */}
+      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
           className="sidebar-overlay"
@@ -22,15 +26,27 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         ></div>
       )}
 
-      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-        <h2 className="sidebar-logo">🥗 NutriAssist</h2>
+      <aside
+        className={`sidebar ${
+          sidebarOpen ? "open" : ""
+        } ${collapsed ? "collapsed" : ""}`}
+      >
+        {/* Logo */}
+        <h2 className="sidebar-logo">
+          {collapsed ? "🥗" : "🥗 NutriAssist"}
+        </h2>
 
+        {/* Menu */}
         <div className="sidebar-menu">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              onClick={() => setSidebarOpen(false)}
+              onClick={() => {
+                if (window.innerWidth < 992) {
+                  setSidebarOpen(false);
+                }
+              }}
               className={
                 location.pathname === item.path
                   ? "sidebar-link active"
@@ -38,14 +54,20 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               }
             >
               <span>{item.icon}</span>
-              {item.name}
+
+              {!collapsed && (
+                <span>{item.name}</span>
+              )}
             </Link>
           ))}
         </div>
 
-        <div className="sidebar-footer">
-          Version 1.0
-        </div>
+        {/* Footer */}
+        {!collapsed && (
+          <div className="sidebar-footer">
+            Version 1.0
+          </div>
+        )}
       </aside>
     </>
   );

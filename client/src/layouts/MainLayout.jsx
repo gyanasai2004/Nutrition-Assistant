@@ -4,36 +4,27 @@ import Navbar from "../components/Navbar";
 import "./MainLayout.css";
 
 function MainLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   return (
     <div className="layout">
+      {showSidebar && <Sidebar />}
 
-      {/* Sidebar */}
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
-
-      {/* Dark Background */}
-      {sidebarOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
-
-      <div className="layout-content">
-
+      <div
+        className="layout-content"
+        style={{
+          marginLeft: showSidebar ? "260px" : "0px",
+          transition: "0.3s",
+        }}
+      >
         <Navbar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
         />
 
         <main className="layout-main">
           {children}
         </main>
-
       </div>
     </div>
   );

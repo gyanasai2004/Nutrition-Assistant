@@ -9,34 +9,46 @@
   align-items: center;
 
   box-shadow: 0 5px 15px rgba(0,0,0,.08);
-
   margin: 15px;
 }
 
-.navbar-title {
-  font-weight: 700;
-  color: #16a34a;
-  margin: 0;
+.navbar-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
 }
 
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.navbar-title{
+  font-weight:700;
+  color:#16a34a;
+  margin:0;
+}
+
+.navbar-right{
+  display:flex;
+  align-items:center;
+  gap:15px;
 }
 
 /* Hamburger Button */
 
 .menu-btn{
-  display:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   width:45px;
   height:45px;
+
   border:none;
   border-radius:10px;
+
   background:#16a34a;
   color:#fff;
+
   font-size:24px;
   cursor:pointer;
+
   transition:.3s;
 }
 
@@ -45,7 +57,7 @@
   transform:scale(1.05);
 }
 
-/* Tablet & Mobile */
+/* Tablet */
 
 @media(max-width:991px){
 
@@ -55,16 +67,8 @@
     height:65px;
   }
 
-  .menu-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
   .navbar-title{
     font-size:20px;
-    flex:1;
-    text-align:center;
   }
 
   .navbar-right{
@@ -82,8 +86,12 @@
 
 @media(max-width:576px){
 
+  .navbar{
+    padding:0 10px;
+  }
+
   .navbar-title{
-    font-size:16px;
+    font-size:17px;
   }
 
   .navbar-right{
@@ -91,8 +99,7 @@
   }
 
   .navbar-right .btn{
-    font-size:12px;
     padding:5px 8px;
+    font-size:12px;
   }
-
 }

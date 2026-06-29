@@ -100,3 +100,19 @@
   }
 
 }
+.sidebar.collapsed{
+    width:80px;
+}
+
+.sidebar.collapsed .sidebar-link{
+    justify-content:center;
+}
+
+.sidebar.collapsed .sidebar-link span{
+    margin:0;
+    font-size:24px;
+}
+
+.sidebar.collapsed .sidebar-logo{
+    font-size:28px;
+}
