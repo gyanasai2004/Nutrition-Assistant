@@ -4,7 +4,7 @@ import { auth } from "../firebase";
 import ThemeToggle from "./ThemeToggle";
 import "./Navbar.css";
 
-function Navbar() {
+function Navbar({ sidebarOpen, setSidebarOpen }) {
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -22,6 +22,15 @@ function Navbar() {
 
   return (
     <header className="navbar">
+
+      {/* Hamburger Menu */}
+      <button
+        className="menu-btn"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        ☰
+      </button>
+
       <h3 className="navbar-title">
         🥗 Nutrition Assistant
       </h3>
@@ -36,6 +45,7 @@ function Navbar() {
           🚪 Logout
         </button>
       </div>
+
     </header>
   );
 }

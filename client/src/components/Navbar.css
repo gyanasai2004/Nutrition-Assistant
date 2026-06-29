@@ -24,3 +24,75 @@
   align-items: center;
   gap: 15px;
 }
+
+/* Hamburger Button */
+
+.menu-btn{
+  display:none;
+  width:45px;
+  height:45px;
+  border:none;
+  border-radius:10px;
+  background:#16a34a;
+  color:#fff;
+  font-size:24px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.menu-btn:hover{
+  background:#15803d;
+  transform:scale(1.05);
+}
+
+/* Tablet & Mobile */
+
+@media(max-width:991px){
+
+  .navbar{
+    margin:10px;
+    padding:0 15px;
+    height:65px;
+  }
+
+  .menu-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .navbar-title{
+    font-size:20px;
+    flex:1;
+    text-align:center;
+  }
+
+  .navbar-right{
+    gap:8px;
+  }
+
+  .navbar-right .btn{
+    padding:6px 10px;
+    font-size:13px;
+  }
+
+}
+
+/* Mobile */
+
+@media(max-width:576px){
+
+  .navbar-title{
+    font-size:16px;
+  }
+
+  .navbar-right{
+    gap:5px;
+  }
+
+  .navbar-right .btn{
+    font-size:12px;
+    padding:5px 8px;
+  }
+
+}

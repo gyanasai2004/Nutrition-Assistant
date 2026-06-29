@@ -10,6 +10,7 @@
   flex-direction: column;
   padding: 25px 15px;
   z-index: 1000;
+  transition: transform .35s ease;
 }
 
 .sidebar-logo {
@@ -34,12 +35,13 @@
   border-radius: 12px;
   margin-bottom: 10px;
   font-weight: 600;
-  transition: 0.3s;
+  transition: all .3s ease;
 }
 
 .sidebar-link:hover {
   background: #1e293b;
   color: white;
+  transform: translateX(6px);
 }
 
 .sidebar-link.active {
@@ -53,4 +55,48 @@
   text-align: center;
   color: #94a3b8;
   font-size: 13px;
+}
+
+/* Overlay */
+
+.sidebar-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 999;
+  animation: fadeIn .3s;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+/* Mobile */
+
+@media (max-width:991px){
+
+  .sidebar{
+      transform: translateX(-100%);
+      box-shadow:0 10px 40px rgba(0,0,0,.35);
+  }
+
+  .sidebar.open{
+      transform:translateX(0);
+  }
+
+}
+
+/* Desktop */
+
+@media (min-width:992px){
+
+  .sidebar{
+      transform:none !important;
+  }
+
+  .sidebar-overlay{
+      display:none;
+  }
+
 }

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
-function Sidebar() {
+function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
 
   const menuItems = [
@@ -13,30 +13,41 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="sidebar">
-      <h2 className="sidebar-logo">🥗 NutriAssist</h2>
+    <>
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
 
-      <div className="sidebar-menu">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={
-              location.pathname === item.path
-                ? "sidebar-link active"
-                : "sidebar-link"
-            }
-          >
-            <span>{item.icon}</span>
-            {item.name}
-          </Link>
-        ))}
-      </div>
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <h2 className="sidebar-logo">🥗 NutriAssist</h2>
 
-      <div className="sidebar-footer">
-        Version 1.0
-      </div>
-    </aside>
+        <div className="sidebar-menu">
+          {menuItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setSidebarOpen(false)}
+              className={
+                location.pathname === item.path
+                  ? "sidebar-link active"
+                  : "sidebar-link"
+              }
+            >
+              <span>{item.icon}</span>
+              {item.name}
+            </Link>
+          ))}
+        </div>
+
+        <div className="sidebar-footer">
+          Version 1.0
+        </div>
+      </aside>
+    </>
   );
 }
 
