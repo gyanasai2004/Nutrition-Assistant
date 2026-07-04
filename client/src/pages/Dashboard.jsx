@@ -102,9 +102,8 @@ function Dashboard() {
   if (!user || !bmi || !nutrition) {
     return (
       <h2 className="text-center mt-5">
-       return (
   <Loader text="Loading Dashboard..." />
-);
+
       </h2>
     );
   }
