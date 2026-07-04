@@ -1,4 +1,41 @@
 function DietPlan({ nutrition }) {
+
+  // Loading Screen
+  if (!nutrition) {
+    return (
+      <div
+        className="card border-0 shadow-sm mt-4"
+        style={{ borderRadius: "20px" }}
+      >
+        <div
+          className="card-body d-flex flex-column justify-content-center align-items-center"
+          style={{ minHeight: "300px" }}
+        >
+          <div
+            className="spinner-border text-success"
+            role="status"
+            style={{
+              width: "3rem",
+              height: "3rem",
+            }}
+          >
+            <span className="visually-hidden">
+              Loading...
+            </span>
+          </div>
+
+          <h5 className="mt-3 text-success fw-bold">
+            🥗 Loading Diet Plan...
+          </h5>
+
+          <p className="text-muted">
+            Preparing your personalized meals...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const meals = [
     {
       title: "🍳 Breakfast",

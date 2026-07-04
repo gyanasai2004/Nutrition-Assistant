@@ -1,44 +1,140 @@
-const foods = {
-  apple: { calories: 95, protein: "0.5 g", carbs: "25 g", fat: "0.3 g" },
-  banana: { calories: 105, protein: "1.3 g", carbs: "27 g", fat: "0.3 g" },
-  egg: { calories: 78, protein: "6 g", carbs: "0.6 g", fat: "5 g" },
-  milk: { calories: 103, protein: "8 g", carbs: "12 g", fat: "2.4 g" },
-  rice: { calories: 130, protein: "2.7 g", carbs: "28 g", fat: "0.3 g" },
-  chicken: { calories: 165, protein: "31 g", carbs: "0 g", fat: "3.6 g" },
-  fish: { calories: 206, protein: "22 g", carbs: "0 g", fat: "12 g" },
-  bread: { calories: 79, protein: "4 g", carbs: "15 g", fat: "1 g" },
-  paneer: { calories: 265, protein: "18 g", carbs: "2 g", fat: "20 g" },
-  potato: { calories: 161, protein: "4 g", carbs: "37 g", fat: "0.2 g" },
-  almonds: { calories: 164, protein: "6 g", carbs: "6 g", fat: "14 g" },
-  oats: { calories: 150, protein: "5 g", carbs: "27 g", fat: "3 g" },
-  orange: { calories: 62, protein: "1.2 g", carbs: "15 g", fat: "0.2 g" },
-  mango: { calories: 99, protein: "1.4 g", carbs: "25 g", fat: "0.6 g" },
-  grapes: { calories: 104, protein: "1 g", carbs: "27 g", fat: "0.2 g" },
-  curd: { calories: 98, protein: "11 g", carbs: "3.4 g", fat: "4.3 g" },
-  cheese: { calories: 113, protein: "7 g", carbs: "1 g", fat: "9 g" },
-  peanuts: { calories: 161, protein: "7 g", carbs: "5 g", fat: "14 g" },
-  dosa: { calories: 168, protein: "4 g", carbs: "30 g", fat: "3 g" },
-  idli: { calories: 58, protein: "2 g", carbs: "12 g", fat: "0.4 g" }
-};
+const axios = require("axios");
+
+const EXCLUDED_KEYWORDS = [
+  "seasoning",
+  "supplement",
+  "baby food",
+  "formula",
+  "vitamin",
+  "powder",
+  "extract",
+  "capsule",
+  "tablet",
+  "drink mix",
+  "protein shake",
+  "medical food",
+];
 
 const searchFood = async (req, res) => {
-  const { food } = req.body;
+  try {
+    const { food } = req.body;
 
-  if (!food) {
-    return res.status(400).json({
-      message: "Food name is required",
+    if (!food || !food.trim()) {
+      return res.status(400).json({
+        message: "Food name is required",
+      });
+    }
+
+    const response = await axios.get(
+      "https://api.nal.usda.gov/fdc/v1/foods/search",
+      {
+        params: {
+          api_key: process.env.USDA_API_KEY,
+          query: food.trim(),
+          pageSize: 30,
+        },
+      }
+    );
+
+    if (!response.data.foods || response.data.foods.length === 0) {
+      return res.status(404).json({
+        message: "Food not found",
+      });
+    }
+
+    // Remove unwanted food items
+    const filteredFoods = response.data.foods.filter((item) => {
+      const name = (item.description || "").toLowerCase();
+
+      return !EXCLUDED_KEYWORDS.some((keyword) =>
+        name.includes(keyword)
+      );
+    });
+
+    // Sort better matches first
+    filteredFoods.sort((a, b) => {
+      const query = food.toLowerCase();
+
+      const aExact = a.description.toLowerCase().startsWith(query);
+      const bExact = b.description.toLowerCase().startsWith(query);
+
+      if (aExact && !bExact) return -1;
+      if (!aExact && bExact) return 1;
+
+      return 0;
+    });
+
+    const foods = filteredFoods.slice(0, 10).map((item) => {
+      let calories = 0;
+      let protein = 0;
+      let carbs = 0;
+      let fat = 0;
+      let fiber = 0;
+      let sugar = 0;
+      let sodium = 0;
+
+      item.foodNutrients.forEach((nutrient) => {
+        switch (nutrient.nutrientName) {
+          case "Energy":
+            calories = nutrient.value || 0;
+            break;
+
+          case "Protein":
+            protein = nutrient.value || 0;
+            break;
+
+          case "Carbohydrate, by difference":
+            carbs = nutrient.value || 0;
+            break;
+
+          case "Total lipid (fat)":
+            fat = nutrient.value || 0;
+            break;
+
+          case "Fiber, total dietary":
+            fiber = nutrient.value || 0;
+            break;
+
+          case "Sugars, total including NLEA":
+            sugar = nutrient.value || 0;
+            break;
+
+          case "Sodium, Na":
+            sodium = nutrient.value || 0;
+            break;
+
+          default:
+            break;
+        }
+      });
+
+      return {
+        foodId: item.fdcId,
+        name: item.description,
+        category: item.foodCategory || "General",
+
+        caloriesPer100g: Number(calories.toFixed(2)),
+        proteinPer100g: Number(protein.toFixed(2)),
+        carbsPer100g: Number(carbs.toFixed(2)),
+        fatPer100g: Number(fat.toFixed(2)),
+        fiberPer100g: Number(fiber.toFixed(2)),
+        sugarPer100g: Number(sugar.toFixed(2)),
+        sodiumPer100g: Number(sodium.toFixed(2)),
+
+        image: "",
+      };
+    });
+
+    res.json(foods);
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+
+    res.status(500).json({
+      message: "Food search failed",
     });
   }
-
-  const result = foods[food.toLowerCase()];
-
-  if (!result) {
-    return res.status(404).json({
-      message: "Food not found",
-    });
-  }
-
-  res.json(result);
 };
 
-module.exports = { searchFood };
+module.exports = {
+  searchFood,
+};

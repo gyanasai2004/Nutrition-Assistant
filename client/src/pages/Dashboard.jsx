@@ -9,6 +9,7 @@ import CaloriesChart from "../charts/CaloriesChart";
 import ProgressCards from "../components/ProgressCards";
 import WeeklyChart from "../charts/WeeklyChart";
 import ReportButton from "../components/ReportButton";
+import Loader from "../components/Loader";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -101,7 +102,9 @@ function Dashboard() {
   if (!user || !bmi || !nutrition) {
     return (
       <h2 className="text-center mt-5">
-        Loading...
+       return (
+  <Loader text="Loading Dashboard..." />
+);
       </h2>
     );
   }

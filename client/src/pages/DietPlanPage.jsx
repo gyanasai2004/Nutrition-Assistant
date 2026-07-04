@@ -39,9 +39,36 @@ function DietPlanPage() {
     }
   };
 
-  if (!nutrition) {
-    return <h2 className="text-center mt-5">Loading...</h2>;
-  }
+ if (!nutrition) {
+  return (
+    <div
+      className="d-flex flex-column justify-content-center align-items-center"
+      style={{
+        minHeight: "100vh",
+        background: "#f8fafc",
+      }}
+    >
+      <div
+        className="spinner-border text-success"
+        role="status"
+        style={{
+          width: "4rem",
+          height: "4rem",
+        }}
+      >
+        <span className="visually-hidden">Loading...</span>
+      </div>
+
+      <h2 className="mt-4 fw-bold text-success">
+        🥗 Nutrition Assistant
+      </h2>
+
+      <p className="text-muted">
+        Preparing your personalized diet plan...
+      </p>
+    </div>
+  );
+}
 
   return (
     <MainLayout>

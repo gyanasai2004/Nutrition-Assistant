@@ -10,12 +10,35 @@ const mealSchema = new mongoose.Schema(
 
     mealType: {
       type: String,
+      enum: ["Breakfast", "Lunch", "Dinner", "Snack"],
       required: true,
     },
 
     food: {
       type: String,
       required: true,
+      trim: true,
+    },
+
+    category: {
+      type: String,
+      default: "General",
+    },
+
+    quantity: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+
+    unit: {
+      type: String,
+      default: "g",
+    },
+
+    weight: {
+      type: Number,
+      default: 100,
     },
 
     calories: {
@@ -24,19 +47,44 @@ const mealSchema = new mongoose.Schema(
     },
 
     protein: {
-      type: String,
-      required: true,
+      type: Number,
+      default: 0,
     },
 
     carbs: {
-      type: String,
-      required: true,
+      type: Number,
+      default: 0,
     },
 
     fat: {
-      type: String,
-      required: true,
+      type: Number,
+      default: 0,
     },
+
+    fiber: {
+      type: Number,
+      default: 0,
+    },
+
+    sugar: {
+      type: Number,
+      default: 0,
+    },
+
+    sodium: {
+      type: Number,
+      default: 0,
+    },
+
+    image: {
+      type: String,
+      default: "",
+    },
+
+    foodId: {
+      type: String,
+      default: "",
+    }
   },
   {
     timestamps: true,

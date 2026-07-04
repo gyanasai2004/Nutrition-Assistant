@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import API from "../services/api";
 
 function Register() {
@@ -16,6 +17,9 @@ function Register() {
     activityLevel: "",
     goal:"maintain",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
 
   const handleChange = (e) => {
     setUser({
@@ -23,17 +27,46 @@ function Register() {
       [e.target.name]: e.target.value,
     });
   };
+const handleSubmit = async () => {
 
-  const handleSubmit = async () => {
-    try {
-      await API.post("/register",user);
+  if (
+    !user.name ||
+    !user.email ||
+    !user.password ||
+    !user.age ||
+    !user.gender ||
+    !user.height ||
+    !user.weight ||
+    !user.activityLevel
+  ) {
+    toast.warning("Please fill all fields");
+    return;
+  }
 
-      navigate("/login");
-    } catch (err) {
-      alert(err.response?.data?.message || "Registration Failed");
-    }
-  };
+  try {
 
+    setLoading(true);
+
+    await API.post("/register", user);
+
+    toast.success("Registration Successful");
+
+    navigate("/login");
+
+  } catch (err) {
+
+    toast.error(
+      err.response?.data?.message ||
+      "Registration Failed"
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
   return (
     <div
       className="container-fluid"
@@ -90,12 +123,27 @@ function Register() {
               </div>
 
               <div className="col-md-6 mb-3">
-                <input
-                  className="form-control"
-                  name="email"
-                  placeholder="Email"
-                  onChange={handleChange}
-                />
+                <div className="input-group">
+
+<input
+className="form-control"
+type={showPassword ? "text" : "password"}
+name="password"
+placeholder="Password"
+onChange={handleChange}
+/>
+
+<button
+type="button"
+className="btn btn-outline-secondary"
+onClick={() =>
+setShowPassword(!showPassword)
+}
+>
+{showPassword ? "🙈" : "👁"}
+</button>
+
+</div>
               </div>
 
               <div className="col-md-6 mb-3">
@@ -171,25 +219,34 @@ function Register() {
 <br />
               </div>
             </div>
-
-            <button
-  className="btn btn-success w-100 mt-3"
-  onClick={handleSubmit}
-  style={{
-    transition: "0.3s",
-    fontWeight: "600",
-    borderRadius: "10px",
-  }}
-  onMouseEnter={(e) => {
-    e.target.style.backgroundColor = "#198754";
-    e.target.style.transform = "scale(1.03)";
-  }}
-  onMouseLeave={(e) => {
-    e.target.style.backgroundColor = "";
-    e.target.style.transform = "scale(1)";
-  }}
+<button
+className="btn btn-success w-100 mt-3"
+onClick={handleSubmit}
+disabled={loading}
+style={{
+fontWeight:"600",
+borderRadius:"10px"
+}}
 >
-  Register
+
+{loading ? (
+
+<>
+
+<span
+className="spinner-border spinner-border-sm me-2"
+></span>
+
+Creating Account...
+
+</>
+
+) : (
+
+"Register"
+
+)}
+
 </button>
 
             <p className="text-center mt-4">
